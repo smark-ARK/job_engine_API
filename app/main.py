@@ -5,12 +5,24 @@ from . import models
 from .database import engine
 from .routers import recruiter, jobs, seekers, apply
 from . import auth
+from fastapi.middleware.cors import CORSMiddleware
+
 
 templates = Jinja2Templates(directory="app/templates")
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(recruiter.router)
 app.include_router(jobs.router)
